@@ -11,4 +11,5 @@ use App\Filament\Resources\CustomerResource;
 class ViewCustomer extends ViewRecord
 {
     protected static string $resource = CustomerResource::class;
+    protected ?string $heading = 'Client';
 }

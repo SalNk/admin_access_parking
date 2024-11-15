@@ -11,17 +11,16 @@ use App\Filament\Resources\CustomerResource;
 class CreateCustomer extends CreateRecord
 {
     protected static string $resource = CustomerResource::class;
+    protected ?string $heading = 'Client';
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-
-
         $formatData =
             'Nom complet : ' . $data['full_name'] .
-            'Adresse mail : ' . $data['email'] .
-            'Téléphone : ' . $data['phone'] .
-            'Détail de la résidence : ' . $data['residence_info'] .
-            'Voitures : ' . ' ';
+            ' - Adresse mail : ' . $data['email'] .
+            ' - Téléphone : ' . $data['phone'] .
+            ' - Détail de la résidence : ' . $data['residence_info'] .
+            ' - Voitures : ' . ' ';
 
         $qrcode = GenerateQrCode::generateSvg($formatData);
 
