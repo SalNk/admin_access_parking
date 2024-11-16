@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Clusters\Vehicles\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
@@ -8,6 +8,7 @@ use App\Models\Vehicle;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use App\Filament\Clusters\Vehicles;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
@@ -17,6 +18,9 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\VehicleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\VehicleResource\RelationManagers;
+use App\Filament\Clusters\Vehicles\Resources\VehicleResource\Pages\EditVehicle;
+use App\Filament\Clusters\Vehicles\Resources\VehicleResource\Pages\ListVehicles;
+use App\Filament\Clusters\Vehicles\Resources\VehicleResource\Pages\CreateVehicle;
 
 class VehicleResource extends Resource
 {
@@ -24,6 +28,7 @@ class VehicleResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-truck';
     protected static ?string $navigationGroup = 'Main';
     protected static ?string $navigationLabel = 'Voitures';
+    protected static ?string $cluster = Vehicles::class;
 
     public static function form(Form $form): Form
     {
@@ -35,36 +40,18 @@ class VehicleResource extends Resource
                             ->relationship(name: 'customer', titleAttribute: 'full_name')
                             ->label('Client')
                             ->placeholder('Sélectionner le client'),
-                        TextInput::make('model')
-                            ->label('Modèle')
-                            ->datalist([
-                                'BMW',
-                                'Ford',
-                                'Mercedes-Benz',
-                                'Porsche',
-                                'Toyota',
-                                'Volkswagen',
-                                'Volvo',
-                                'Tata Motors',
-                                'Citroën',
-                                'Suzuki',
-                                'Jeep',
-                                'Kia',
-                                'Lamborghini',
-                                'Land Rover',
-                                'Range Rover',
-                                'Lexus',
-                                'Mazda',
-                                'Mitsubishi',
-                                'Nissan',
-                                'Peugeot',
-                                'Renault',
-                                'Honda',
-                                'Hyundai',
-                                'Jaguar',
-                                'Audi',
-                                'Chevrolet',
-                            ]),
+                        Select::make('model_vehicles_id')
+                            ->relationship(name: 'model_vehicles', titleAttribute: 'name')
+                            ->label('Le modèle du véhicule')
+                            ->placeholder(placeholder: 'Sélectionner le modèle du véhicule'),
+                        Select::make('brand_vehicles_id')
+                            ->relationship(name: 'custbrand_vehicleomer', titleAttribute: 'name')
+                            ->label('Le marque du véhicule')
+                            ->placeholder('Sélectionner la marque du véhicule'),
+                        Select::make('vin_types_id')
+                            ->relationship(name: 'vin_types', titleAttribute: 'name')
+                            ->label('Matricule')
+                            ->placeholder('Sélectionner le type de véhicule'),
                         TextInput::make('vin')
                             ->required()
                             ->label('Matricule'),
@@ -92,8 +79,12 @@ class VehicleResource extends Resource
                     ->label('Nom du client')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('model')
+                TextColumn::make('model_vehicles.name')
                     ->label('Modèle')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('brand_vehicles.name')
+                    ->label('Marque')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('vin')
@@ -127,9 +118,9 @@ class VehicleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListVehicles::route('/'),
-            'create' => Pages\CreateVehicle::route('/create'),
-            'edit' => Pages\EditVehicle::route('/{record}/edit'),
+            'index' => ListVehicles::route('/'),
+            'create' => CreateVehicle::route('/create'),
+            'edit' => EditVehicle::route('/{record}/edit'),
         ];
     }
 }

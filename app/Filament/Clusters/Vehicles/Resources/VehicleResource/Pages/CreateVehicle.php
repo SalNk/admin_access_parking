@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\VehicleResource\Pages;
+namespace App\Filament\Clusters\Vehicles\Resources\VehicleResource\Pages;
 
-use App\Filament\Resources\VehicleResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Clusters\Vehicles\Resources\VehicleResource;
 
 class CreateVehicle extends CreateRecord
 {

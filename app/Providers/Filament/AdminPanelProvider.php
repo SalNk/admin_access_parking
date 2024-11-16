@@ -53,6 +53,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
+            ->renderHook(
+                'panels::auth.login.form.after',
+                fn() => view('auth.socialite.google')
+            );
     }
 }

@@ -6,8 +6,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "blade-ui-kit/blade-ui-kit": "^0.6.2",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.9",
+        "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "simplesoftwareio/simple-qrcode": "^4.2"
     },
