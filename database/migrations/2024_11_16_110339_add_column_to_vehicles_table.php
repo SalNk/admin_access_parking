@@ -11,7 +11,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('vehicles', function (Blueprint $table) {
-            $table->foreignId('vin_types_id')->constrained('vin_types')->cascadeOnDelete();
+            $table->string('brand');
+            $table->string('vin_types');
         });
     }
 

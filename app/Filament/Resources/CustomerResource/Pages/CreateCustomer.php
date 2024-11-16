@@ -15,6 +15,7 @@ class CreateCustomer extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        // dd($data);
         $formatData =
             'Nom complet : ' . $data['full_name'] .
             ' - Adresse mail : ' . $data['email'] .

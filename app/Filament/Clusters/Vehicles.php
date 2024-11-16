@@ -9,4 +9,5 @@ class Vehicles extends Cluster
     protected static ?string $navigationIcon = 'heroicon-o-truck';
     protected static ?string $navigationGroup = 'Main';
     protected static ?string $clusterBreadcrumb = 'Véhicules';
+    protected static ?string $navigationLabel = 'Véhicules';
 }

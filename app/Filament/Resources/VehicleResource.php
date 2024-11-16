@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Clusters\Vehicles\Resources;
+namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
@@ -18,9 +18,9 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\VehicleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\VehicleResource\RelationManagers;
-use App\Filament\Clusters\Vehicles\Resources\VehicleResource\Pages\EditVehicle;
-use App\Filament\Clusters\Vehicles\Resources\VehicleResource\Pages\ListVehicles;
-use App\Filament\Clusters\Vehicles\Resources\VehicleResource\Pages\CreateVehicle;
+use App\Filament\Resources\VehicleResource\Pages\EditVehicle;
+use App\Filament\Resources\VehicleResource\Pages\ListVehicles;
+use App\Filament\Resources\VehicleResource\Pages\CreateVehicle;
 
 class VehicleResource extends Resource
 {
@@ -28,7 +28,6 @@ class VehicleResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-truck';
     protected static ?string $navigationGroup = 'Main';
     protected static ?string $navigationLabel = 'Voitures';
-    protected static ?string $cluster = Vehicles::class;
 
     public static function form(Form $form): Form
     {
@@ -40,24 +39,26 @@ class VehicleResource extends Resource
                             ->relationship(name: 'customer', titleAttribute: 'full_name')
                             ->label('Client')
                             ->placeholder('Sélectionner le client'),
-                        Select::make('model_vehicles_id')
-                            ->relationship(name: 'model_vehicles', titleAttribute: 'name')
-                            ->label('Le modèle du véhicule')
-                            ->placeholder(placeholder: 'Sélectionner le modèle du véhicule'),
-                        Select::make('brand_vehicles_id')
-                            ->relationship(name: 'custbrand_vehicleomer', titleAttribute: 'name')
-                            ->label('Le marque du véhicule')
-                            ->placeholder('Sélectionner la marque du véhicule'),
-                        Select::make('vin_types_id')
-                            ->relationship(name: 'vin_types', titleAttribute: 'name')
-                            ->label('Matricule')
-                            ->placeholder('Sélectionner le type de véhicule'),
+                        TextInput::make('model')
+                            ->required()
+                            ->label('Modèle du véhicule')
+                            ->placeholder('Veuillez saisir le modèle du véhicule'),
+                        TextInput::make('brand')
+                            ->required()
+                            ->label('La marque du véhicule')
+                            ->placeholder('Veuillez saisir la marque du véhicule'),
+                        TextInput::make('vin_type')
+                            ->required()
+                            ->label('Type de matricule')
+                            ->placeholder('Veuillez saisir le type de matricule'),
                         TextInput::make('vin')
                             ->required()
-                            ->label('Matricule'),
+                            ->label('Le matricule')
+                            ->placeholder(placeholder: 'Veuillez saisir le matricule'),
                         TextInput::make('color')
                             ->required()
-                            ->label('Couleur'),
+                            ->label('Couleur')
+                            ->placeholder('Veuillez saisir la couleur du véhicule'),
                         Select::make('transmission')
                             ->options([
                                 'MANUAL' => 'Manuel',
