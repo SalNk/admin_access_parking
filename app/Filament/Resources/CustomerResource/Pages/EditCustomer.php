@@ -17,4 +17,11 @@ class EditCustomer extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function getRedirectUrl(): string|null
+    {
+        return static::getResource()::getUrl('view', [
+            'record' => $this->record
+        ]);
+    }
 }

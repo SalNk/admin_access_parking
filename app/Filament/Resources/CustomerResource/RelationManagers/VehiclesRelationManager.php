@@ -18,6 +18,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 class VehiclesRelationManager extends RelationManager
 {
     protected static string $relationship = 'vehicles';
+    protected static ?string $title = 'Liste des Véhicules';
 
     public function form(Form $form): Form
     {
@@ -67,8 +68,8 @@ class VehiclesRelationManager extends RelationManager
                             ->label('Couleur'),
                         Select::make('transmission')
                             ->options([
-                                'MANUAL' => 'Manuel',
-                                'AUTOMATIC' => 'Automatique',
+                                'manual' => 'Manuelle',
+                                'automatic' => 'Automatique',
                             ])
                             ->required(),
                         Textarea::make('description')
@@ -83,10 +84,6 @@ class VehiclesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('model')
             ->columns([
-                TextColumn::make('customer.full_name')
-                    ->label('Nom du client')
-                    ->searchable()
-                    ->sortable(),
                 TextColumn::make('model')
                     ->label('Modèle')
                     ->searchable()

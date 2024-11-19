@@ -10,9 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            $table->string('brand');
-            $table->string('vin_type');
+        Schema::create('parking_accesses', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
+            $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('parking_accesses');
     }
 };

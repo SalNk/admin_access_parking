@@ -3,30 +3,55 @@
 namespace App\Filament\Resources\CustomerResource\Pages;
 
 use Filament\Actions;
+use Filament\Actions\Concerns\InteractsWithRecord;
+use Filament\Forms\Form;
 use App\Utils\GenerateQrCode;
+use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Wizard\Step;
 use Filament\Resources\Pages\CreateRecord;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Filament\Resources\CustomerResource;
+use App\Models\Customer;
+use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
+
 
 class CreateCustomer extends CreateRecord
 {
+    use HasWizard;
+
     protected static string $resource = CustomerResource::class;
     protected ?string $heading = 'Client';
 
-    protected function mutateFormDataBeforeCreate(array $data): array
+    public function form(Form $form): Form
     {
-        // dd($data);
-        $formatData =
-            'Nom complet : ' . $data['full_name'] .
-            ' - Adresse mail : ' . $data['email'] .
-            ' - Téléphone : ' . $data['phone'] .
-            ' - Détail de la résidence : ' . $data['residence_info'] .
-            ' - Voitures : ' . ' ';
+        return parent::form($form)
+            ->schema([
+                Wizard::make($this->getSteps())
+                    ->startOnStep($this->getStartStep())
+                    ->cancelAction($this->getCancelFormAction())
+                    ->submitAction($this->getSubmitFormAction())
+                    ->skippable($this->hasSkippableSteps())
+                    ->contained(false),
+            ])
+            ->columns(null);
+    }
 
-        $qrcode = GenerateQrCode::generateSvg($formatData);
+    /** @return Step[] */
+    protected function getSteps(): array
+    {
+        return [
+            Step::make('Details du client')
+                ->schema([
+                    Section::make()->schema(CustomerResource::getDetailsFormSchema())->columns(),
+                ]),
 
-        $data['qrcode'] = $qrcode;
-
-        return $data;
+            Step::make('Détails de la voiture')
+                ->schema([
+                    Section::make()->schema([
+                        CustomerResource::getItemsRepeater(),
+                    ]),
+                ]),
+        ];
     }
 }

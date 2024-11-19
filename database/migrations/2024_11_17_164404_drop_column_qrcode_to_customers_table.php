@@ -10,9 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            $table->string('brand');
-            $table->string('vin_type');
+        Schema::table('customers', function (Blueprint $table) {
+            $table->dropColumn('qrcode');
         });
     }
 
@@ -21,7 +20,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
+        Schema::table('customers', function (Blueprint $table) {
             //
         });
     }

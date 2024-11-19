@@ -10,9 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            $table->string('brand');
-            $table->string('vin_type');
+        Schema::table('parking_accesses', function (Blueprint $table) {
+            $table->enum('status', ['parked', 'exit'])->default('parked');
         });
     }
 
@@ -21,7 +20,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
+        Schema::table('parking_accesses', function (Blueprint $table) {
             //
         });
     }

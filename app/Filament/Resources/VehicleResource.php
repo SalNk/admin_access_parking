@@ -27,22 +27,52 @@ class VehicleResource extends Resource
     protected static ?string $model = Vehicle::class;
     protected static ?string $navigationIcon = 'heroicon-o-truck';
     protected static ?string $navigationGroup = 'Main';
-    protected static ?string $navigationLabel = 'Voitures';
+    protected static ?string $navigationLabel = 'Véhicules';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Section::make()
+                    ->columns(2)
                     ->schema([
                         Select::make('customer_id')
                             ->relationship(name: 'customer', titleAttribute: 'full_name')
                             ->label('Client')
-                            ->placeholder('Sélectionner le client'),
+                            ->placeholder('Sélectionner le client')
+                            ->columnSpanFull(),
                         TextInput::make('model')
                             ->required()
                             ->label('Modèle du véhicule')
-                            ->placeholder('Veuillez saisir le modèle du véhicule'),
+                            ->placeholder('Veuillez saisir le modèle du véhicule')
+                            ->datalist([
+                                'BMW',
+                                'Ford',
+                                'Mercedes-Benz',
+                                'Porsche',
+                                'Toyota',
+                                'Volkswagen',
+                                'Volvo',
+                                'Tata Motors',
+                                'Citroën',
+                                'Suzuki',
+                                'Jeep',
+                                'Kia',
+                                'Lamborghini',
+                                'Land Rover',
+                                'Range Rover',
+                                'Lexus',
+                                'Mazda',
+                                'Mitsubishi',
+                                'Nissan',
+                                'Peugeot',
+                                'Renault',
+                                'Honda',
+                                'Hyundai',
+                                'Jaguar',
+                                'Audi',
+                                'Chevrolet',
+                            ]),
                         TextInput::make('brand')
                             ->required()
                             ->label('La marque du véhicule')
@@ -61,13 +91,14 @@ class VehicleResource extends Resource
                             ->placeholder('Veuillez saisir la couleur du véhicule'),
                         Select::make('transmission')
                             ->options([
-                                'MANUAL' => 'Manuel',
-                                'AUTOMATIC' => 'Automatique',
+                                'manuel' => 'Manuelle',
+                                'automatic' => 'Automatique',
                             ])
                             ->required(),
                         Textarea::make('description')
                             ->rows(5)
-                            ->required(),
+                            ->required()
+                            ->columnSpanFull(),
                     ])
             ]);
     }
@@ -80,11 +111,11 @@ class VehicleResource extends Resource
                     ->label('Nom du client')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('model_vehicles.name')
+                TextColumn::make('model')
                     ->label('Modèle')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('brand_vehicles.name')
+                TextColumn::make('brand')
                     ->label('Marque')
                     ->searchable()
                     ->sortable(),

@@ -21,8 +21,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $residence_info
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string $qrcode
  * 
+ * @property Collection|ParkingAccess[] $parking_accesses
  * @property Collection|Vehicle[] $vehicles
  *
  * @package App\Models
@@ -36,9 +36,13 @@ class Customer extends Model
 		'avatar',
 		'email',
 		'phone',
-		'residence_info',
-		'qrcode'
+		'residence_info'
 	];
+
+	public function parking_accesses()
+	{
+		return $this->hasMany(ParkingAccess::class);
+	}
 
 	public function vehicles()
 	{

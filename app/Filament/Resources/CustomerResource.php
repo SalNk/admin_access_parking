@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Closure;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Customer;
@@ -10,16 +11,19 @@ use Filament\Tables\Table;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Infolists\Components\ImageEntry;
 use App\Filament\Resources\CustomerResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -29,6 +33,7 @@ use App\Filament\Resources\CustomerResource\RelationManagers\VehiclesRelationMan
 
 class CustomerResource extends Resource
 {
+    public $customer;
     protected static ?string $model = Customer::class;
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
     protected static ?string $navigationGroup = 'Main';
@@ -38,49 +43,22 @@ class CustomerResource extends Resource
     {
         return $form
             ->schema([
-                Group::make()
-                    ->schema([
-                        Section::make()
-                            ->schema([
-                                FileUpload::make('avatar')
-                                    // ->imageEditor()
-                                    ->avatar(),
-                            ]),
-                    ]),
-                // Group::make()
-                //     ->schema([
-                //         Section::make()
-                //             ->schema([
-                //                 FileUpload::make('avatar')
-                //                     ->label('QR CODE')
-                //                     // ->imageEditor()
-                //                     ->avatar(),
-                //             ]),
-                //     ]),
-                Group::make()
-                    ->schema([
-                        Section::make('Information du client')
-                            ->schema([
-                                TextInput::make('full_name')
-                                    ->placeholder('Nkwey Salem Bienvenu')
-                                    ->label('Nom complet')
-                                    ->required(),
-                                TextInput::make('email')
-                                    ->label('Adresse mail')
-                                    ->placeholder('salemnk02@gmail.com'),
-                                TextInput::make('phone')
-                                    ->label('Téléphone')
-                                    ->placeholder('+243815229941')
-                                    ->required()
-                                    ->minLength(9)
-                                    ->maxLength(20),
-                                TextInput::make('residence_info')
-                                    ->label('Détail de la résidence')
-                                    ->placeholder('Av. Orientation C/Masina Q/Sans-fil')
-                                    ->required()
-                            ])
+                Forms\Components\Section::make()
+                    ->schema(static::getDetailsFormSchema())
+                    ->columns(3),
+                Forms\Components\Section::make('Détails voitures')
+                    ->headerActions([
+                        Action::make('reset')
+                            ->label('Effacer')
+                            ->modalHeading('Are you sure?')
+                            ->modalDescription('Vous êtes sur le point d\'effacer toutes les véhicules')
+                            ->requiresConfirmation()
+                            ->color('danger')
+                            ->action(fn(Forms\Set $set) => $set('items', [])),
                     ])
-                    ->columnSpan(['lg' => 2]),
+                    ->schema([
+                        static::getItemsRepeater(),
+                    ]),
             ]);
     }
 
@@ -117,13 +95,6 @@ class CustomerResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            VehiclesRelationManager::class,
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
@@ -134,29 +105,24 @@ class CustomerResource extends Resource
         ];
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            VehiclesRelationManager::class,
+        ];
+    }
 
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
             ->schema([
-                GroupInfolist::make()
+                SectionInfolist::make()
                     ->schema([
                         SectionInfolist::make()
                             ->schema([
                                 ImageEntry::make('avatar'),
-                            ]),
-                    ]),
-                GroupInfolist::make()
-                    ->schema([
-                        SectionInfolist::make()
-                            ->schema([
-                                ViewEntry::make('qrcode')
-                                    ->label('QR Code')
-                                    ->view('components.qrcode'),
-                            ]),
-                    ]),
-                GroupInfolist::make()
-                    ->schema([
+                            ])
+                            ->columnSpan(1),
                         SectionInfolist::make('Information du client')
                             ->schema([
                                 TextEntry::make('full_name')
@@ -172,8 +138,107 @@ class CustomerResource extends Resource
                                     ->label('Détail de la résidence')
                                     ->placeholder('Av. Orientation C/Masina Q/Sans-fil')
                             ])
+                            ->columnSpan(2)
                     ])
-                    ->columnSpan(['lg' => 2]),
+                    ->columns(3)
             ]);
+    }
+
+    /** @return Forms\Components\Component[] */
+    public static function getDetailsFormSchema(): array
+    {
+        return [
+            Group::make()
+                ->schema([
+                    Section::make()
+                        ->schema([
+                            FileUpload::make('avatar')
+                                // ->imageEditor()
+                                ->avatar(),
+                        ]),
+                ]),
+            // Group::make()
+            //     ->schema([
+            //         Section::make()
+            //             ->schema([
+            //                 FileUpload::make('avatar')
+            //                     ->label('QR CODE')
+            //                     // ->imageEditor()
+            //                     ->avatar(),
+            //             ]),
+            //     ]),
+            Group::make()
+                ->schema([
+                    Section::make('Information du client')
+                        ->schema([
+                            TextInput::make('full_name')
+                                ->placeholder('Nkwey Salem Bienvenu')
+                                ->label('Nom complet')
+                                ->required(),
+                            TextInput::make('email')
+                                ->label('Adresse mail')
+                                ->placeholder('salemnk02@gmail.com'),
+                            TextInput::make('phone')
+                                ->label('Téléphone')
+                                ->placeholder('+243815229941')
+                                ->required()
+                                ->minLength(9)
+                                ->maxLength(20),
+                            TextInput::make('residence_info')
+                                ->label('Détail de la résidence')
+                                ->placeholder('Av. Orientation C/Masina Q/Sans-fil')
+                                ->required()
+                        ])
+                ])
+                ->columnSpan(['lg' => 2]),
+        ];
+    }
+
+    public static function getItemsRepeater(): Repeater
+    {
+        return Repeater::make('vehicles')
+            ->label('La liste de(s) véhicle(s)')
+            ->relationship()
+            ->schema([
+                Section::make()
+                    ->schema([
+                        TextInput::make('model')
+                            ->required()
+                            ->label('Modèle du véhicule')
+                            ->placeholder('Veuillez saisir le modèle du véhicule'),
+                        TextInput::make('brand')
+                            ->required()
+                            ->label('La marque du véhicule')
+                            ->placeholder('Veuillez saisir la marque du véhicule'),
+                        TextInput::make('vin_type')
+                            ->required()
+                            ->label('Type de matricule')
+                            ->placeholder('Veuillez saisir le type de matricule'),
+                        TextInput::make('vin')
+                            ->required()
+                            ->label('Le matricule')
+                            ->placeholder(placeholder: 'Veuillez saisir le matricule'),
+                        TextInput::make('color')
+                            ->required()
+                            ->label('Couleur')
+                            ->placeholder('Veuillez saisir la couleur du véhicule'),
+                        Select::make('transmission')
+                            ->options([
+                                'manual' => 'Manuelle',
+                                'automatic' => 'Automatique',
+                            ])
+                            ->required(),
+                        Textarea::make('description')
+                            ->rows(5)
+                            ->required(),
+                    ])
+            ])
+            // ->orderColumn('sort')
+            ->defaultItems(1)
+            ->hiddenLabel()
+            ->columns([
+                'md' => 10,
+            ])
+            ->required();
     }
 }
