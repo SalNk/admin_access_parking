@@ -10,8 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('parking_accesses', function (Blueprint $table) {
-            $table->enum('status', ['parked', 'exit'])->default('parked');
+        Schema::table('customers', function (Blueprint $table) {
+            $table->longText('qrcode');
         });
     }
 
@@ -20,7 +20,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('parking_accesses', function (Blueprint $table) {
+        Schema::table('customers', function (Blueprint $table) {
             //
         });
     }

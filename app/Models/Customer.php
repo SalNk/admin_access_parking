@@ -36,16 +36,12 @@ class Customer extends Model
 		'avatar',
 		'email',
 		'phone',
-		'residence_info'
+		'residence_info',
+		'qrcode',
 	];
-
-	public function parking_accesses()
-	{
-		return $this->hasMany(ParkingAccess::class);
-	}
 
 	public function vehicles()
 	{
-		return $this->hasMany(Vehicle::class);
+		return $this->hasOne(Vehicle::class);
 	}
 }

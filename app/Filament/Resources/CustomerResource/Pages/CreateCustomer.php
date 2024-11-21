@@ -3,7 +3,8 @@
 namespace App\Filament\Resources\CustomerResource\Pages;
 
 use Filament\Actions;
-use Filament\Actions\Concerns\InteractsWithRecord;
+use App\Models\Vehicle;
+use App\Models\Customer;
 use Filament\Forms\Form;
 use App\Utils\GenerateQrCode;
 use Filament\Forms\Components\Wizard;
@@ -12,7 +13,7 @@ use Filament\Forms\Components\Wizard\Step;
 use Filament\Resources\Pages\CreateRecord;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Filament\Resources\CustomerResource;
-use App\Models\Customer;
+use Filament\Actions\Concerns\InteractsWithRecord;
 use Filament\Resources\Pages\CreateRecord\Concerns\HasWizard;
 
 
@@ -48,9 +49,7 @@ class CreateCustomer extends CreateRecord
 
             Step::make('Détails de la voiture')
                 ->schema([
-                    Section::make()->schema([
-                        CustomerResource::getItemsRepeater(),
-                    ]),
+                    Section::make()->schema([CustomerResource::getItemsRepeater()]),
                 ]),
         ];
     }

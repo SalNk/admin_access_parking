@@ -7,8 +7,9 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
+use App\Utils\GenerateQrCode;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class Vehicle
@@ -58,4 +59,28 @@ class Vehicle extends Model
 	{
 		return $this->hasMany(ParkingAccess::class);
 	}
+
+	protected static function booted()
+	{
+		static::saved(callback: function ($vehicle) {
+
+
+			if ($vehicle->customer_id) {
+				$customer = Customer::findOrFail($vehicle->customer_id);
+				// dd($customer);
+
+				$formatData =
+					'Modele du vehicule : ' . $vehicle->model .
+					' - Matricule : ' . $vehicle->vin .
+					' - Couleur : ' . $vehicle->color .
+					' - Nom du client : ' . $customer->full_name;
+
+				$qrcode = GenerateQrCode::generateSvg($formatData);
+
+				$customer['qrcode'] = $qrcode;
+				$customer->save();
+			}
+		});
+	}
+
 }

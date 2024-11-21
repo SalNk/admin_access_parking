@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\CustomerResource\Pages;
 
-use App\Filament\Resources\CustomerResource;
 use Filament\Actions;
+use App\Utils\GenerateQrCode;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\CustomerResource;
 
 class EditCustomer extends EditRecord
 {

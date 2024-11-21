@@ -123,24 +123,27 @@ class CustomerResource extends Resource
                                 ImageEntry::make('avatar'),
                             ])
                             ->columnSpan(1),
+                        SectionInfolist::make()
+                            ->schema([
+                                ViewEntry::make('qrcode')
+                                    ->label('QR Code')
+                                    ->view('components.qrcode'),
+                            ])
+                            ->columnSpan(1),
                         SectionInfolist::make('Information du client')
                             ->schema([
                                 TextEntry::make('full_name')
-                                    ->placeholder('Nkwey Salem Bienvenu')
                                     ->label('Nom complet'),
                                 TextEntry::make('email')
-                                    ->label('Adresse mail')
-                                    ->placeholder('salemnk02@gmail.com'),
+                                    ->label('Adresse mail'),
                                 TextEntry::make('phone')
-                                    ->label('Téléphone')
-                                    ->placeholder('+243815229941'),
+                                    ->label('Téléphone'),
                                 TextEntry::make('residence_info')
                                     ->label('Détail de la résidence')
-                                    ->placeholder('Av. Orientation C/Masina Q/Sans-fil')
                             ])
                             ->columnSpan(2)
                     ])
-                    ->columns(3)
+                    ->columns(2)
             ]);
     }
 
@@ -194,51 +197,45 @@ class CustomerResource extends Resource
         ];
     }
 
-    public static function getItemsRepeater(): Repeater
+    public static function getItemsRepeater()
     {
-        return Repeater::make('vehicles')
-            ->label('La liste de(s) véhicle(s)')
-            ->relationship()
+        return Section::make()
+            ->relationship('vehicles')
             ->schema([
-                Section::make()
-                    ->schema([
-                        TextInput::make('model')
-                            ->required()
-                            ->label('Modèle du véhicule')
-                            ->placeholder('Veuillez saisir le modèle du véhicule'),
-                        TextInput::make('brand')
-                            ->required()
-                            ->label('La marque du véhicule')
-                            ->placeholder('Veuillez saisir la marque du véhicule'),
-                        TextInput::make('vin_type')
-                            ->required()
-                            ->label('Type de matricule')
-                            ->placeholder('Veuillez saisir le type de matricule'),
-                        TextInput::make('vin')
-                            ->required()
-                            ->label('Le matricule')
-                            ->placeholder(placeholder: 'Veuillez saisir le matricule'),
-                        TextInput::make('color')
-                            ->required()
-                            ->label('Couleur')
-                            ->placeholder('Veuillez saisir la couleur du véhicule'),
-                        Select::make('transmission')
-                            ->options([
-                                'manual' => 'Manuelle',
-                                'automatic' => 'Automatique',
-                            ])
-                            ->required(),
-                        Textarea::make('description')
-                            ->rows(5)
-                            ->required(),
+                TextInput::make('model')
+                    ->required()
+                    ->label('Modèle du véhicule')
+                    ->placeholder('Veuillez saisir le modèle du véhicule'),
+                TextInput::make('brand')
+                    ->required()
+                    ->label('La marque du véhicule')
+                    ->placeholder('Veuillez saisir la marque du véhicule'),
+                Select::make('vin_type')
+                    ->options([
+                        'Plaque normal CGO' => 'Plaque normal CGO',
+                        'Plaque présidentiel PR' => 'Plaque présidentiel PR',
+                        'Plaque des nations uni UN' => 'Plaque des nations uni UN',
                     ])
-            ])
-            // ->orderColumn('sort')
-            ->defaultItems(1)
-            ->hiddenLabel()
-            ->columns([
-                'md' => 10,
-            ])
-            ->required();
+                    ->required()
+                    ->label('Type de matricule')
+                    ->placeholder('Veuillez saisir le type de matricule'),
+                TextInput::make('vin')
+                    ->required()
+                    ->label('Le matricule')
+                    ->placeholder(placeholder: 'Veuillez saisir le matricule'),
+                TextInput::make('color')
+                    ->required()
+                    ->label('Couleur')
+                    ->placeholder('Veuillez saisir la couleur du véhicule'),
+                Select::make('transmission')
+                    ->options([
+                        'manual' => 'Manuelle',
+                        'automatic' => 'Automatique',
+                    ])
+                    ->required(),
+                Textarea::make('description')
+                    ->rows(5)
+                    ->required(),
+            ]);
     }
 }

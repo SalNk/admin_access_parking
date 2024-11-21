@@ -77,7 +77,12 @@ class VehicleResource extends Resource
                             ->required()
                             ->label('La marque du véhicule')
                             ->placeholder('Veuillez saisir la marque du véhicule'),
-                        TextInput::make('vin_type')
+                        Select::make('vin_type')
+                            ->options([
+                                'Plaque normal CGO' => 'Plaque normal CGO',
+                                'Plaque présidentiel PR' => 'Plaque présidentiel PR',
+                                'Plaque des nations uni UN' => 'Plaque des nations uni UN',
+                            ])
                             ->required()
                             ->label('Type de matricule')
                             ->placeholder('Veuillez saisir le type de matricule'),

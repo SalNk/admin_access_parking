@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\VehicleResource\Pages;
 
 use Filament\Actions;
+use App\Utils\GenerateQrCode;
 use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\VehicleResource;
 
