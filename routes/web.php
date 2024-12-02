@@ -1,12 +1,27 @@
 <?php
 
+use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialiteController;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('test', fn() => phpinfo());
+
+Route::get('/download-qrcode/{id}', function ($id) {
+    $customer = Customer::findOrFail($id);
+
+    if (!$customer->qrcode || !Storage::disk('public')->exists($customer->qrcode)) {
+        abort(404, 'QR Code not found.');
+    }
+
+    $filePath = storage_path('app/public/' . $customer->qrcode);
+    return response()->download($filePath, 'qrcode_' . $customer->full_name . '.png');
+})->name('download.qrcode');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
