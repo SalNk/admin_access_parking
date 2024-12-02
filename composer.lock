@@ -565,67 +565,6 @@
             "time": "2024-09-19T14:15:21+00:00"
         },
         {
-            "name": "contao/imagine-svg",
-            "version": "1.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/contao/imagine-svg.git",
-                "reference": "3e8c7356951a94bc8ff6338296496a2a3cd23dc4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/contao/imagine-svg/zipball/3e8c7356951a94bc8ff6338296496a2a3cd23dc4",
-                "reference": "3e8c7356951a94bc8ff6338296496a2a3cd23dc4",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "imagine/imagine": "^1.1",
-                "php": "^7.2 || ^8.0"
-            },
-            "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.8",
-                "composer/semver": "^3.3",
-                "contao/test-case": "^4.4",
-                "phpunit/phpunit": "^8.5.4",
-                "symfony/filesystem": "^5.0"
-            },
-            "type": "library",
-            "extra": {
-                "bamarni-bin": {
-                    "bin-links": false,
-                    "target-directory": "tools"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Contao\\ImagineSvg\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Martin Auswöger",
-                    "homepage": "https://github.com/ausi"
-                }
-            ],
-            "description": "Contao Imagine SVG library",
-            "support": {
-                "issues": "https://github.com/contao/imagine-svg/issues",
-                "source": "https://github.com/contao/imagine-svg/tree/1.0.4"
-            },
-            "funding": [
-                {
-                    "url": "https://to.contao.org/donate",
-                    "type": "custom"
-                }
-            ],
-            "time": "2024-10-02T10:47:33+00:00"
-        },
-        {
             "name": "danharrin/date-format-converter",
             "version": "v0.3.1",
             "source": {
