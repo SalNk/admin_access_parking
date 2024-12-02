@@ -28,7 +28,10 @@ use Filament\Infolists\Components\ImageEntry;
 use App\Filament\Resources\CustomerResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Infolists\Components\Group as GroupInfolist;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Infolists\Components\Section as SectionInfolist;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use App\Filament\Resources\CustomerResource\RelationManagers\VehiclesRelationManager;
 
 class CustomerResource extends Resource
@@ -141,7 +144,13 @@ class CustomerResource extends Resource
                                 TextEntry::make('residence_info')
                                     ->label('Détail de la résidence')
                             ])
-                            ->columnSpan(2)
+                            ->columnSpan(2),
+                        // SectionInfolist::make('Images de la voiture')
+                        //     ->schema([
+                        //         SpatieMediaLibraryImageColumn::make('vehicle-image')
+                        //             ->label('Images')
+                        //             ->collection('vehicle-images')
+                        //     ])
                     ])
                     ->columns(2)
             ]);
@@ -233,6 +242,15 @@ class CustomerResource extends Resource
                         'automatic' => 'Automatique',
                     ])
                     ->required(),
+                Section::make('Images')
+                    ->schema([
+                        SpatieMediaLibraryFileUpload::make('media')
+                            ->collection('vehicle-images')
+                            ->multiple()
+                            ->maxFiles(2)
+                            ->hiddenLabel(),
+                    ])
+                    ->collapsible(),
                 Textarea::make('description')
                     ->rows(5)
                     ->required(),

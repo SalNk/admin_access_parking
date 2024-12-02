@@ -8,7 +8,9 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use App\Utils\GenerateQrCode;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -31,8 +33,10 @@ use Illuminate\Database\Eloquent\Collection;
  *
  * @package App\Models
  */
-class Vehicle extends Model
+class Vehicle extends Model implements HasMedia
 {
+	use InteractsWithMedia;
+
 	protected $table = 'vehicles';
 
 	protected $casts = [
@@ -58,6 +62,11 @@ class Vehicle extends Model
 	public function parking_accesses()
 	{
 		return $this->hasMany(ParkingAccess::class);
+	}
+
+	public function registerMediaCollections(): void
+	{
+		$this->addMediaCollection('vehicle-images');
 	}
 
 	protected static function booted()

@@ -17,6 +17,8 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\VehicleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use App\Filament\Resources\VehicleResource\RelationManagers;
 use App\Filament\Resources\VehicleResource\Pages\EditVehicle;
 use App\Filament\Resources\VehicleResource\Pages\ListVehicles;
@@ -100,6 +102,15 @@ class VehicleResource extends Resource
                                 'automatic' => 'Automatique',
                             ])
                             ->required(),
+                        Section::make('Images')
+                            ->schema([
+                                SpatieMediaLibraryFileUpload::make('media')
+                                    ->collection('vehicle-images')
+                                    ->multiple()
+                                    ->maxFiles(2)
+                                    ->hiddenLabel(),
+                            ])
+                            ->collapsible(),
                         Textarea::make('description')
                             ->rows(5)
                             ->required()
@@ -112,6 +123,9 @@ class VehicleResource extends Resource
     {
         return $table
             ->columns([
+                SpatieMediaLibraryImageColumn::make('vehicle-image')
+                    ->label('Image')
+                    ->collection('vehicle-images'),
                 TextColumn::make('customer.full_name')
                     ->label('Nom du client')
                     ->searchable()
