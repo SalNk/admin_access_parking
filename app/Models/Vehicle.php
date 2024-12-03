@@ -7,8 +7,10 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Endroid\QrCode\QrCode;
 use App\Utils\GenerateQrCode;
 use Spatie\MediaLibrary\HasMedia;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Collection;
@@ -84,9 +86,14 @@ class Vehicle extends Model implements HasMedia
 					' - Couleur : ' . $vehicle->color .
 					' - Nom du client : ' . $customer->full_name;
 
-				$qrcode = GenerateQrCode::generateSvg($formatData);
+				$qrCode = new QrCode($formatData);
+				$writer = new PngWriter();
 
-				$customer['qrcode'] = $qrcode;
+				// Générer le QR Code en PNG
+				$qrCodeContent = $writer->write($qrCode)->getString();
+
+				// Sauvegarder le QR Code dans le champ 'qrcode' du client (en base64)
+				$customer->qrcode = base64_encode($qrCodeContent);  // Encodé en base64 pour le stockage
 				$customer->save();
 			}
 		});

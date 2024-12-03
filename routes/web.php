@@ -2,6 +2,7 @@
 
 use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialiteController;
 
@@ -12,15 +13,14 @@ Route::get('/', function () {
 Route::get('/download-qrcode/{id}', function ($id) {
     $customer = Customer::findOrFail($id);
 
-    if (!$customer->qrcode) {
-        abort(404, 'QR Code not found.');
-    }
+    // Décoder le QR Code en base64 et le convertir en image
+    $qrCodeContent = base64_decode($customer->qrcode);
 
-    $filename = 'qrcode_' . $customer->full_name . '.svg';
-
-    return response($customer->qrcode)
-        ->header('Content-Type', 'image/svg+xml')
-        ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+    // Retourner l'image PNG avec les en-têtes appropriés pour le téléchargement
+    return Response::make($qrCodeContent, 200, [
+        'Content-Type' => 'image/png',
+        'Content-Disposition' => 'attachment; filename="qrcode.png"',
+    ]);
 })->name('download.qrcode');
 
 Route::get('/dashboard', function () {
