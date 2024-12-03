@@ -98,7 +98,7 @@ class VehicleResource extends Resource
                             ->placeholder('Veuillez saisir la couleur du véhicule'),
                         Select::make('transmission')
                             ->options([
-                                'manuel' => 'Manuelle',
+                                'manual' => 'Manuelle',
                                 'automatic' => 'Automatique',
                             ])
                             ->required(),

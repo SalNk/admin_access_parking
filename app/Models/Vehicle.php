@@ -10,10 +10,10 @@ use Carbon\Carbon;
 use Endroid\QrCode\QrCode;
 use App\Utils\GenerateQrCode;
 use Spatie\MediaLibrary\HasMedia;
-use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Collection;
+use Endroid\QrCode\Writer\PngWriter;
 
 /**
  * Class Vehicle
@@ -82,7 +82,7 @@ class Vehicle extends Model implements HasMedia
 
 				$formatData =
 					'Modele du vehicule : ' . $vehicle->model .
-					' - Matricule : ' . $vehicle->vin .
+					' - Matricule : ' . $vehicle->vin_type . ' ' . $vehicle->vin .
 					' - Couleur : ' . $vehicle->color .
 					' - Nom du client : ' . $customer->full_name;
 
