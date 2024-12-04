@@ -81,7 +81,7 @@ class Vehicle extends Model implements HasMedia
 				// dd($customer);
 
 				$formatData =
-					'Modele du vehicule : ' . $vehicle->model .
+					'Modele du vehicule : ' . $vehicle->model . ", " . $vehicle->brand .
 					' - Matricule : ' . $vehicle->vin_type . ' ' . $vehicle->vin .
 					' - Couleur : ' . $vehicle->color .
 					' - Nom du client : ' . $customer->full_name;
